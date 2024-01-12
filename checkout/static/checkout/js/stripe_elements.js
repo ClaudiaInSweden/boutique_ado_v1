@@ -54,9 +54,8 @@ form.addEventListener('submit', function(ev) {
     $('#payment-form').fadeToggle(100);
     $('#loading-overlay').fadeToggle(100);
 
-// Add after all webhook set up to check if save-info box is checked
     var saveInfo = Boolean($('#id-save-info').attr('checked'));
-    //Form using {% csrf_token %} in the form
+    // From using {% csrf_token %} in the form
     var csrfToken = $('input[name="csrfmiddlewaretoken"]').val();
     var postData = {
         'csrfmiddlewaretoken': csrfToken,
@@ -65,7 +64,7 @@ form.addEventListener('submit', function(ev) {
     };
     var url = '/checkout/cache_checkout_data/';
 
-    $.post(url, postData).done(function() {
+    $.post(url, postData).done(function () {
         stripe.confirmCardPayment(clientSecret, {
             payment_method: {
                 card: card,
@@ -79,21 +78,20 @@ form.addEventListener('submit', function(ev) {
                         city: $.trim(form.town_or_city.value),
                         country: $.trim(form.country.value),
                         state: $.trim(form.county.value),
-    
                     }
                 }
             },
             shipping: {
                 name: $.trim(form.full_name.value),
                 phone: $.trim(form.phone_number.value),
-                address:{
+                address: {
                     line1: $.trim(form.street_address1.value),
                     line2: $.trim(form.street_address2.value),
                     city: $.trim(form.town_or_city.value),
                     country: $.trim(form.country.value),
                     postal_code: $.trim(form.postcode.value),
                     state: $.trim(form.county.value),
-               }
+                }
             },
         }).then(function(result) {
             if (result.error) {
@@ -114,15 +112,8 @@ form.addEventListener('submit', function(ev) {
                 }
             }
         });
-    }).fail(function() {
+    }).fail(function () {
         // just reload the page, the error will be in django messages
         location.reload();
     })
-
 });
-// End of new variable set from line 57
-// Move the whole stripe.confirmCardPayment function into the 
-// curly bracets of $.post(url, postData).done(function () {
-// stripe.confirmationCard Payment xxx })
-
-    
